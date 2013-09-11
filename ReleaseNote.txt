@@ -1,0 +1,51 @@
+- AQ_Engine 
+	- DLL / Project / API (A faire)
+		- Definition de briques externalisables
+		- Definition de callback
+		- Input / Ouptut
+			- Input: requete "AQL" / Structure C
+			- Ouput: Mini Matrice / Table temporaire
+		- Storage (voir loader)
+			Ajouter une DLL de gestion du Storage (Structure des fichiers) => decoupler AQ_Engine du format de stockage
+	- Prise en Charge du langage SQL
+		- SELECT
+			Remonte uniquement les indices des tables presentes dans le Select
+		- FROM
+			Liste de tables, sans jointure
+			Pas de possibilite d'exprimer de condition de jointure autrement que par un filtre (Pose des problemes dans le cas des jointures OUTER)
+		- WHERE
+			liste de conditions reliees par des "ET" logique (AND).
+			les conditions sont de la forme: 
+				- jointure entre 2 tables (5 operateurs de comparaisons, outer/inner)
+				- field in values
+			Ajouter la possibilite d'exprimer des expression booleenne complexes:
+				- Ajout des operateurs NOT et OR (NOT, OR et AND sont les operateurs de bases et sont suffisant pour exprimer l'ensemble de la logique booleenne)
+				- Ajout des operateurs de parenthesage (a.b+c != a.(b+c))
+				- Ajout des operateurs arithmetiques (t1.val_1 = t2.val_1 + t3.val_1)
+			Une solution pour expimer le filtre dans la clause WHERE pourrait etre d'implementer sa resolution sous forme du callback
+		- GROUP
+			Liste de colonnes.
+			Restriction: les colonnes doivent etre regroupees par table.
+		- ORDER
+			Liste de colonnes.
+			Restriction: les colonnes doivent etre regroupees par table.
+			Pas de possibilte d'ordonner sur des valeurs calculees (resultats de fonctions d'aggregat par exemple)
+	- Multithreading
+		- Determiner les etapes du moteur parallelisables
+	- Loader / Storage
+		- Ajouter dans une DLL (AQStorage ??)
+		- Ajout d'un loader incremental (definition d'un API ...)
+		-	Modification du format de Storage (voir Coefficient d'expansion)
+	
+- Tests
+	- Framework python
+		- generation de bases
+		- importation de bases
+		- generation de requetes
+		- comparaisons des resultats AlgoQuest (AQEngine) avec d'autres SGBD
+	
+- Third Party Tools / Utilities
+	- SQL Solver (Resolution des requetes imbriquees + certains verbes SQL (function aggregation, partition by, case, ...))
+	- AQ Server
+	- Drivers ODBC
+	- Display
